@@ -1,11 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Inicio from './components/Inicio'
-import SobreMi from './components/SobreMi'
-import Contacto from './components/Contacto'
-import Post from './components/Post'
-import Articulo from './components/Articulo'
-import NotFound from './components/NotFound'
 Vue.use(Router)
 
 export default new Router({
@@ -14,32 +8,63 @@ export default new Router({
         {
             path: '/',
             name: 'inicio',
-            component: Inicio
+            component: () => import('./views/Inicio')
+        },
+        {
+            path: '/inicio',
+            redirect: {name: 'inicio'},
+        },
+        {
+            path: '/home',
+            redirect: {name: 'inicio'},
+        },
+        {
+            path: '/portada',
+            redirect: {name: 'inicio'},
         },
         {
             path: '/sobremi',
             name: 'sobremi',
-            component: SobreMi
+            alias: ["/acerca"],
+            component: () => import('./views/SobreMi')
         },
         {
             path: '/contacto',
             name: 'contacto',
-            component: Contacto
+            alias: ["/contactame"],
+            component: () => import('./views/Contacto')
         },
         {
             path: '/post',
             name: 'post',
-            component: Post,
+            component: () => import('./views/Post'),
             children: [
                 {
                     path: ':articulo',
-                    component: Articulo,
+                    component: () => import('./views/Articulo'),
                 }
+            ]
+        },
+        {  
+            path: '/administrador',
+            name: 'administrador',
+            component: () => import('./views/Administrador'),
+            children: [
+                {
+                    path: 'simple',
+                    name: 'simple',
+                    component: () => import("./views/AdministradorSimple.vue")
+                },
+                {
+                    path: 'avanzado',
+                    name: 'avanzado',
+                    component: () => import("./views/AdministradorAvanzado.vue")
+                },
             ]
         },
         {
             path: '*',
-            component: NotFound
+            component: () => import('./views/NotFound'),
         }
     ]
 })
